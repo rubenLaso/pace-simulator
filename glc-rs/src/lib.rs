@@ -11,9 +11,13 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
 }
 
 #[wasm_bindgen]
 pub fn greet() {
-    alert("Hello, glc-rs!");
+    alert("Hello from glc-rs!");
+    log("Hello from glc-rs!");
 }
