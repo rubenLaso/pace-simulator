@@ -2,7 +2,7 @@ import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { greet } from 'glc-wasm';
+import { greet, print_coords } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
@@ -10,29 +10,23 @@ import dragdataPlugin from "chartjs-plugin-dragdata";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables, dragdataPlugin);
 
-greet();
-
 let isDraggingPoint;
+
+const xs = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0];
+const ys = [100, 96, 94, 91, 89, 87, 83, 76, 67, 55, 40];
 
 export const options = {
 	hover: {
 		mode: "dataset"
 	},
 	datasets: {
+		cubicInterpolationMode: 'monotone',
 		scatter: {
 			borderWidth: 2.5,
 			fill: false,
 			pointRadius: 10,
 			pointHitRadius: 15,
 			showLine: true
-		}
-	},
-	layout: {
-		padding: {
-			left: 20,
-			right: 20,
-			top: 20,
-			bottom: 10
 		}
 	},
 	scales: {
@@ -43,27 +37,28 @@ export const options = {
 	},
 	plugins: {
 		dragData: {
-			round: 1,
+			round: 2,
 			showTooltip: true,
 			onDragStart: (e, datasetIndex, index, value) => {
 				isDraggingPoint = true;
 			},
 			onDragEnd: (e, datasetIndex, index, value) => {
 				isDraggingPoint = false;
+				print_coords(xs[index], value);
 			}
-		}
-	}
+		},
+	},
 };
 
 export default function App() {
 	greet()
 
 	const [userData, setUserData] = useState({
-		labels: [100, 75, 50, 25, 0],
+		labels: xs,
 		datasets: [
 			{
 				label: "Performance",
-				data: [100, 90, 80, 60, 20],
+				data: ys,
 				tension: 0.2,
 				borderColor: "black",
 				borderWidth: 2,
@@ -75,7 +70,6 @@ export default function App() {
 		<React.Fragment>
 			<CssBaseline>
 				<Container>
-					Hello World!!!
 					<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-dragdata@2.2.3/dist/chartjs-plugin-dragdata.min.js"></script>
 					<Line options={options} data={userData} />
 				</Container>
