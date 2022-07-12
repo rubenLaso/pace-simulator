@@ -82,7 +82,7 @@ lazy_static! {
 }
 
 #[wasm_bindgen]
-pub fn new_coords() -> &Coordinates {
+pub fn new_coords() {
     COORDS.set(Coordinates::new());
 }
 
