@@ -2,7 +2,7 @@ import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { greet, add_coords, print_all_coords, new_coords, set_coords } from 'glc-wasm';
+import { greet, add_coords, set_coords, build_spline } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
@@ -20,8 +20,6 @@ for (let i = 0; i < xs.length; i++) {
 	const y = ys[i];
 	add_coords(x, y);
 }
-
-print_all_coords();
 
 export const options = {
 	hover: {
@@ -53,7 +51,7 @@ export const options = {
 			onDragEnd: (_e, _datasetIndex, index, value) => {
 				isDraggingPoint = false;
 				set_coords(index, value);
-				print_all_coords();
+				build_spline();
 			}
 		},
 	},

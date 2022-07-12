@@ -1,5 +1,6 @@
 mod utils;
 
+use cubic_spline::{Point, Points, SplineOpts, TryFrom};
 use lazy_static::lazy_static;
 use mut_static::MutStatic;
 use wasm_bindgen::prelude::*;
@@ -55,25 +56,26 @@ pub fn print_coords(x: f32, y: f32) {
 }
 
 struct Coordinates {
-    xs: Vec<f32>,
-    ys: Vec<f32>,
+    points: Vec<Point>,
 }
 
 impl Coordinates {
     pub fn new() -> Self {
         Coordinates {
-            xs: (Vec::new()),
-            ys: (Vec::new()),
+            points: (Vec::new()),
         }
     }
 
     pub fn add_coord(&mut self, x: f32, y: f32) {
-        self.xs.push(x);
-        self.ys.push(y);
+        self.points.push(Point {
+            x: x as f64,
+            y: y as f64,
+            tension: None,
+        });
     }
 
     pub fn set_coord(&mut self, idx: usize, y: f32) {
-        self.ys[idx] = y;
+        self.points[idx].y = y as f64;
     }
 }
 
@@ -107,9 +109,24 @@ pub fn set_coords(idx: usize, y: f32) {
 pub fn print_all_coords() {
     new_coords();
     let coords = COORDS.read().unwrap();
-    for i in 0..coords.xs.len() {
-        let x = coords.xs[i];
-        let y = coords.ys[i];
-        print_coords(x, y);
+    for p in coords.points.iter() {
+        print_coords(p.x as f32, p.y as f32);
+    }
+}
+
+#[wasm_bindgen]
+pub fn build_spline() {
+    let options = SplineOpts::new().tension(0.2);
+
+    let coords = COORDS.read().unwrap();
+
+    let points = Points::try_from(&(coords.points)).expect("Could not convert coordinates");
+
+    let spline = points
+        .calc_spline(&options)
+        .expect("Could not calculate spline");
+
+    for point in spline.get_ref() {
+        console_log!("x: {}, y: {}", point.x, point.y);
     }
 }
