@@ -15,8 +15,6 @@ let isDraggingPoint;
 const xs = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0];
 const ys = [100, 96, 94, 91, 89, 87, 83, 76, 67, 55, 40];
 
-new_coords();
-
 for (let i = 0; i < xs.length; i++) {
 	const x = xs[i];
 	const y = ys[i];

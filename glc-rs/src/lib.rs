@@ -81,26 +81,35 @@ lazy_static! {
     static ref COORDS: MutStatic<Coordinates> = MutStatic::new();
 }
 
-#[wasm_bindgen]
 pub fn new_coords() {
-    COORDS.set(Coordinates::new());
+    if !COORDS.is_set().expect("Error with MutStatic variable") {
+        COORDS
+            .set(Coordinates::new())
+            .expect("Could not create new Coordinates");
+    }
 }
 
 #[wasm_bindgen]
 pub fn add_coords(x: f32, y: f32) {
-    COORDS.write().unwrap().add_coord(x, y);
+    new_coords();
+    let mut coords = COORDS.write().unwrap();
+    coords.add_coord(x, y);
 }
 
 #[wasm_bindgen]
 pub fn set_coords(idx: usize, y: f32) {
-    COORDS.write().unwrap().set_coord(idx, y);
+    new_coords();
+    let mut coords = COORDS.write().unwrap();
+    coords.set_coord(idx, y);
 }
 
 #[wasm_bindgen]
 pub fn print_all_coords() {
-    for i in 0..COORDS.read().unwrap().xs.len() {
-        let x = COORDS.read().unwrap().xs[i];
-        let y = COORDS.read().unwrap().ys[i];
+    new_coords();
+    let coords = COORDS.read().unwrap();
+    for i in 0..coords.xs.len() {
+        let x = coords.xs[i];
+        let y = coords.ys[i];
         print_coords(x, y);
     }
 }
