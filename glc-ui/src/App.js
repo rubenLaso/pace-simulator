@@ -2,7 +2,7 @@ import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { greet, add_coords, set_coords, build_spline } from 'glc-wasm';
+import { greet, add_coords, set_coords, build_spline, expected_laptime } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
@@ -23,7 +23,7 @@ for (let i = 0; i < xs.length; i++) {
 
 export const options = {
 	hover: {
-		mode: "dataset"
+		mode: "nearest",
 	},
 	datasets: {
 		cubicInterpolationMode: 'monotone',
@@ -54,7 +54,33 @@ export const options = {
 				build_spline();
 			}
 		},
-	},
+		tooltip: {
+			callbacks: {
+				title: function (tooltipItem, _data) {
+					const x = tooltipItem[0].label;
+
+					return 'Tyre state: ' + x + '%';
+				},
+				label: function (context) {
+					let label = context.dataset.label || '';
+
+					if (label) {
+						label += ': ';
+					}
+					if (context.parsed.y !== null) {
+						label += new Intl.NumberFormat('en-UK').format(context.parsed.y) + '%';
+					}
+					return label;
+				},
+				afterLabel: function (context) {
+					let label = context.dataset.label || '';
+					const y = context.parsed.y;
+					const time = new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(expected_laptime(y));
+					return 'Laptime: ' + time;
+				}
+			}
+		}
+	}
 };
 
 export default function App() {
