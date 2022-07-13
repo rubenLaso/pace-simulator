@@ -133,7 +133,7 @@ pub fn build_spline() {
 
 #[wasm_bindgen]
 pub fn expected_laptime(tyre_performance: f32) -> f32 {
-    let DEFAULT_LAPTIME: f32 = 100.;
+    const DEFAULT_LAPTIME: f32 = 100.;
     let normalised_performance = tyre_performance / 100.0;
     let laptime = DEFAULT_LAPTIME / normalised_performance;
     laptime
