@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { greet, add_coords, set_coords, build_spline, expected_laptime } from 'glc-wasm';
+import { add_coords, set_coords, build_spline, expected_laptime } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
