@@ -78,7 +78,7 @@ fn wear_chart_data() -> &'static MutStatic<WearChartData> {
     {
         WEAR_CHART_DATA
             .set(WearChartData::new())
-            .expect("Could not create new Coordinates");
+            .expect("Could not create new MutStatic variable");
     }
     return &WEAR_CHART_DATA;
 }
@@ -86,7 +86,7 @@ fn wear_chart_data() -> &'static MutStatic<WearChartData> {
 fn wear() -> &'static MutStatic<Wear> {
     if !WEAR.is_set().expect("Error with MutStatic variable") {
         WEAR.set(Wear::new())
-            .expect("Could not create new Coordinates");
+            .expect("Could not create new MutStatic variable");
     }
     return &WEAR;
 }
