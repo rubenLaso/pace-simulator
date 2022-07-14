@@ -14,7 +14,7 @@ default = ["console_error_panic_hook"]
 wasm-bindgen = "0.2.63"
 lazy_static = "1.4.0"
 mut_static = "5.0.0"
-cubic_spline = "1.0.0"
+splines = "1.0.0-rc.1"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires

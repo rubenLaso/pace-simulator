@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { add_coords, set_coords, build_spline, expected_laptime } from 'glc-wasm';
+import { add_tyre_wear, set_tyre_wear, build_tyre_wear_spline, expected_laptime } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
@@ -11,12 +11,16 @@ Chart.register(...registerables, dragdataPlugin);
 
 let isDraggingPoint;
 
-export const DraggableLineChart = ({ xs, ys }) => {
+const tyres_default_xs = [100, 95, 90, 80, 70, 60, 50, 40, 20, 0];
+const tyres_default_ys = [100, 97, 95, 94, 92, 90, 87, 82, 72, 60];
+
+export const TyrePerfLineChart = ({ xs = tyres_default_xs, ys = tyres_default_ys, ymax = 100, ymin = 0, xmax = 100, xmin = 0, title = 'Performance' }) => {
 	for (let i = 0; i < xs.length; i++) {
 		const x = xs[i];
 		const y = ys[i];
-		add_coords(x, y);
+		add_tyre_wear(x, y);
 	}
+	build_tyre_wear_spline();
 
 	const options = {
 		hover: {
@@ -24,18 +28,21 @@ export const DraggableLineChart = ({ xs, ys }) => {
 		},
 		datasets: {
 			cubicInterpolationMode: 'monotone',
-			scatter: {
-				borderWidth: 2.5,
-				fill: false,
-				pointRadius: 10,
-				pointHitRadius: 15,
-				showLine: true
-			}
 		},
 		scales: {
 			y: {
-				min: 0,
-				max: 100
+				type: 'linear',
+				min: ymin,
+				max: ymax,
+				ticks: {
+					display: false
+				}
+			},
+			x: {
+				type: 'linear',
+				reverse: 'true',
+				min: xmin,
+				max: xmax
 			}
 		},
 		plugins: {
@@ -47,8 +54,10 @@ export const DraggableLineChart = ({ xs, ys }) => {
 				},
 				onDragEnd: (_e, _datasetIndex, index, value) => {
 					isDraggingPoint = false;
-					set_coords(index, value);
-					build_spline();
+					const x = xs[index];
+					const y = value;
+					set_tyre_wear(index, y);
+					build_tyre_wear_spline();
 				}
 			},
 			tooltip: {
@@ -67,12 +76,13 @@ export const DraggableLineChart = ({ xs, ys }) => {
 						if (context.parsed.y !== null) {
 							label += new Intl.NumberFormat('en-UK').format(context.parsed.y) + '%';
 						}
+
 						return label;
 					},
 					afterLabel: function (context) {
-						let label = context.dataset.label || '';
-						const y = context.parsed.y;
-						const time = new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(expected_laptime(y));
+						const tyre_state = context.parsed.y;
+						const time = new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(expected_laptime(tyre_state));
+
 						return 'Laptime: ' + time;
 					}
 				}
@@ -84,7 +94,7 @@ export const DraggableLineChart = ({ xs, ys }) => {
 		labels: xs,
 		datasets: [
 			{
-				label: "Performance",
+				label: title,
 				data: ys,
 				tension: 0.2,
 				borderColor: "black",
