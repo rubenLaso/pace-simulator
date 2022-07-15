@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { add_tyre_wear, set_tyre_wear, build_tyre_wear_spline, expected_laptime_by_tyre_wear } from 'glc-wasm';
+import { add_track_temp, set_track_temp, build_track_temp_spline, expected_laptime_by_track_temp, print_track_temp } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
@@ -11,16 +11,16 @@ Chart.register(...registerables, dragdataPlugin);
 
 let isDraggingPoint;
 
-const tyres_default_xs = [100, 95, 90, 80, 70, 60, 50, 40, 20, 0];
-const tyres_default_ys = [100, 97, 95, 94, 92, 90, 87, 82, 72, 60];
+const tyres_default_xs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+const tyres_default_ys = [21, 20, 19, 18, 17, 17, 18, 19, 21, 23, 26, 30, 34, 39, 42, 41, 38, 35, 31, 26, 24, 23, 22, 21];
 
-export const TyrePerfLineChart = ({ xs = tyres_default_xs, ys = tyres_default_ys, ymax = 100, ymin = 0, xmax = 100, xmin = 0, title = 'Performance', laptime = 100 }) => {
+export const TrackTempLineChart = ({ xs = tyres_default_xs, ys = tyres_default_ys, ymax = 60, ymin = 10, xmax = 23, xmin = 0, title = 'Temperature', laptime = 100 }) => {
 	for (let i = 0; i < xs.length; i++) {
 		const x = xs[i];
 		const y = ys[i];
-		add_tyre_wear(x, y);
+		add_track_temp(x, y);
 	}
-	build_tyre_wear_spline();
+	build_track_temp_spline();
 
 	const options = {
 		hover: {
@@ -34,13 +34,9 @@ export const TyrePerfLineChart = ({ xs = tyres_default_xs, ys = tyres_default_ys
 				type: 'linear',
 				min: ymin,
 				max: ymax,
-				ticks: {
-					display: false
-				}
 			},
 			x: {
 				type: 'linear',
-				reverse: 'true',
 				min: xmin,
 				max: xmax
 			}
@@ -56,16 +52,18 @@ export const TyrePerfLineChart = ({ xs = tyres_default_xs, ys = tyres_default_ys
 					isDraggingPoint = false;
 					const x = xs[index];
 					const y = value;
-					set_tyre_wear(index, y);
-					build_tyre_wear_spline();
+					set_track_temp(index, y);
+					build_track_temp_spline();
+					print_track_temp();
 				}
 			},
 			tooltip: {
 				callbacks: {
 					title: function (tooltipItem, _data) {
 						const x = tooltipItem[0].label;
+						const temp = new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'hour' }).format(x);
 
-						return 'Tyre state: ' + x + '%';
+						return 'Track temperature: ' + temp;
 					},
 					label: function (context) {
 						let label = context.dataset.label || '';
@@ -74,14 +72,14 @@ export const TyrePerfLineChart = ({ xs = tyres_default_xs, ys = tyres_default_ys
 							label += ': ';
 						}
 						if (context.parsed.y !== null) {
-							label += new Intl.NumberFormat('en-UK').format(context.parsed.y) + '%';
+							label += new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'celsius' }).format(context.parsed.y);
 						}
 
 						return label;
 					},
 					afterLabel: function (context) {
-						const tyre_state = context.parsed.y;
-						const time = new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(expected_laptime_by_tyre_wear(laptime, tyre_state));
+						const track_temp = context.parsed.y;
+						const time = new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(expected_laptime_by_track_temp(laptime, track_temp));
 
 						return 'Laptime: ' + time;
 					}

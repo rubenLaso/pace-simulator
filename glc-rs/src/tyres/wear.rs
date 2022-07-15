@@ -5,8 +5,6 @@ use splines::{Interpolation, Key, Spline};
 
 use crate::utils::utils;
 
-use wasm_bindgen::prelude::*;
-
 struct WearChartData {
     xs_: Vec<f32>,
     ys_: Vec<f32>,
@@ -91,32 +89,27 @@ fn wear() -> &'static MutStatic<Wear> {
     return &WEAR;
 }
 
-#[wasm_bindgen]
 pub fn add_perf(state: f32, performance: f32) {
     let mut chart_data = wear_chart_data().write().unwrap();
     chart_data.add_perf(state, performance);
 }
 
-#[wasm_bindgen]
 pub fn set_perf(idx: usize, performance: f32) {
     let mut chart_data = wear_chart_data().write().unwrap();
     chart_data.set_perf(idx, performance);
 }
 
-#[wasm_bindgen]
 pub fn build_spline() {
     let chart_data = wear_chart_data().read().unwrap();
     let mut wear = wear().write().unwrap();
     wear.build_spline(chart_data.as_ref());
 }
 
-#[wasm_bindgen]
 pub fn inv_performance(tyre_state: f32) -> f32 {
     let mut wear = wear().write().unwrap();
     return wear.perf_penalty(tyre_state);
 }
 
-#[wasm_bindgen]
 pub fn print_tyre_wear_performance() {
     let wear = wear().read().unwrap();
 
@@ -127,7 +120,6 @@ pub fn print_tyre_wear_performance() {
     }
 }
 
-#[wasm_bindgen]
 pub fn print_tyre_wear_chart_data() {
     let wear = wear_chart_data().read().unwrap();
 

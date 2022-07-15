@@ -1,9 +1,11 @@
 mod utils;
 
+mod track;
 mod tyres;
-use crate::tyres::wear;
 
 use wasm_bindgen::prelude::*;
+
+use crate::utils::utils::log;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -12,34 +14,68 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
+pub fn set_track_temp(idx: usize, temp: f32) {
+    track::temp::set_temp(idx, temp);
+}
+
+#[wasm_bindgen]
+pub fn add_track_temp(time: f32, temp: f32) {
+    track::temp::add_temp(time, temp);
+}
+
+#[wasm_bindgen]
+pub fn build_track_temp_spline() {
+    track::temp::build_spline();
+}
+
+#[wasm_bindgen]
+pub fn print_track_temp() {
+    track::temp::print_track_temp_performance();
+}
+
+#[wasm_bindgen]
+pub fn print_track_temp_chart() {
+    track::temp::print_track_temp_chart_data();
+}
+
+#[wasm_bindgen]
 pub fn set_tyre_wear(idx: usize, perf: f32) {
-    wear::set_perf(idx, perf);
+    tyres::wear::set_perf(idx, perf);
 }
 
 #[wasm_bindgen]
 pub fn add_tyre_wear(state: f32, perf: f32) {
-    wear::add_perf(state, perf);
+    tyres::wear::add_perf(state, perf);
 }
 
 #[wasm_bindgen]
 pub fn build_tyre_wear_spline() {
-    wear::build_spline();
-}
-
-#[wasm_bindgen]
-pub fn expected_laptime(tyre_state: f32) -> f32 {
-    const DEFAULT_LAPTIME: f32 = 100.;
-    let normalised_performance = wear::inv_performance(tyre_state);
-    let laptime = DEFAULT_LAPTIME * normalised_performance;
-    return laptime;
+    tyres::wear::build_spline();
 }
 
 #[wasm_bindgen]
 pub fn print_tyre_wear() {
-    wear::print_tyre_wear_performance();
+    tyres::wear::print_tyre_wear_performance();
 }
 
 #[wasm_bindgen]
 pub fn print_tyre_wear_chart() {
-    wear::print_tyre_wear_chart_data();
+    tyres::wear::print_tyre_wear_chart_data();
+}
+
+#[wasm_bindgen]
+pub fn expected_laptime_by_tyre_wear(base_laptime: f32, tyre_state: f32) -> f32 {
+    let tyre_inv_perf = tyres::wear::inv_performance(tyre_state);
+    let laptime = base_laptime * tyre_inv_perf;
+
+    return laptime;
+}
+
+#[wasm_bindgen]
+pub fn expected_laptime_by_track_temp(base_laptime: f32, _track_temp: f32) -> f32 {
+    let track_temp_inv_perf = 1.0;
+
+    let laptime = base_laptime * track_temp_inv_perf;
+
+    return laptime;
 }
