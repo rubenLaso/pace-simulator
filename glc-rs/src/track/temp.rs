@@ -5,8 +5,6 @@ use splines::{Interpolation, Key, Spline};
 
 use crate::utils::utils;
 
-use wasm_bindgen::prelude::*;
-
 struct TempChartData {
     xs_: Vec<f32>,
     ys_: Vec<f32>,
@@ -46,9 +44,9 @@ impl Temp {
 
         for i in 0..chart_data.xs_.len() {
             let x = chart_data.xs_[i] as f32;
+            let t = x * 60.0;
             let y = chart_data.ys_[i] as f32;
-
-            data.push(Key::new(x, y, Interpolation::Linear));
+            data.push(Key::new(t, y, Interpolation::Linear));
         }
         // Temp at 24h == 0h
         data.push(Key::new(
@@ -60,8 +58,8 @@ impl Temp {
         let spline = Spline::from_vec(data);
 
         for i in 0..self.temperatures_.len() {
-            let x = i as f32;
-            let y = spline.clamped_sample(x).unwrap();
+            let t = i as f32;
+            let y = spline.clamped_sample(t).unwrap();
             self.temperatures_[i] = y;
         }
     }
