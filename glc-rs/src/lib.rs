@@ -5,13 +5,31 @@ mod tyres;
 
 use wasm_bindgen::prelude::*;
 
-use crate::utils::utils::log;
-
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[wasm_bindgen]
+pub fn set_laptime_cold_track(laptime: f32) {
+    track::perf::set_laptime_cold(laptime);
+}
+
+#[wasm_bindgen]
+pub fn set_laptime_warm_track(laptime: f32) {
+    track::perf::set_laptime_warm(laptime);
+}
+
+#[wasm_bindgen]
+pub fn get_laptime_cold_track() -> f32 {
+    return track::perf::get_laptime_cold();
+}
+
+#[wasm_bindgen]
+pub fn get_laptime_warm_track() -> f32 {
+    return track::perf::get_laptime_warm();
+}
 
 #[wasm_bindgen]
 pub fn set_track_temp(idx: usize, temp: f32) {
@@ -26,6 +44,16 @@ pub fn add_track_temp(time: f32, temp: f32) {
 #[wasm_bindgen]
 pub fn build_track_temp_spline() {
     track::temp::build_spline();
+}
+
+#[wasm_bindgen]
+pub fn get_max_track_temp() -> f32 {
+    return track::temp::max_temp();
+}
+
+#[wasm_bindgen]
+pub fn get_min_track_temp() -> f32 {
+    return track::temp::min_temp();
 }
 
 #[wasm_bindgen]
@@ -72,10 +100,14 @@ pub fn expected_laptime_by_tyre_wear(base_laptime: f32, tyre_state: f32) -> f32 
 }
 
 #[wasm_bindgen]
-pub fn expected_laptime_by_track_temp(base_laptime: f32, _track_temp: f32) -> f32 {
-    let track_temp_inv_perf = 1.0;
+pub fn expected_laptime_by_track_temp(track_temp: f32) -> f32 {
+    let track_temp_inv_perf = track::perf::performance_penalty(
+        track_temp,
+        track::temp::max_temp(),
+        track::temp::min_temp(),
+    );
 
-    let laptime = base_laptime * track_temp_inv_perf;
+    let laptime = track::perf::get_laptime_cold() * track_temp_inv_perf;
 
     return laptime;
 }

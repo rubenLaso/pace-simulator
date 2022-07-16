@@ -12,6 +12,8 @@ struct TempChartData {
 
 struct Temp {
     temperatures_: [f32; 24 * 60],
+    max_temp_: f32,
+    min_temp_: f32,
 }
 
 impl TempChartData {
@@ -36,6 +38,8 @@ impl Temp {
     pub fn new() -> Self {
         Temp {
             temperatures_: [1.0; 24 * 60],
+            max_temp_: 0.0,
+            min_temp_: 0.0,
         }
     }
 
@@ -62,11 +66,23 @@ impl Temp {
             let y = spline.clamped_sample(t).unwrap();
             self.temperatures_[i] = y;
         }
+
+        self.max_temp_ = self.temperatures_.iter().fold(f32::MIN, |a, &b| a.max(b));
+
+        self.min_temp_ = self.temperatures_.iter().fold(f32::MAX, |a, &b| a.min(b));
     }
 
     pub fn temperature(&mut self, time_in_secs: f32) -> f32 {
         let time_in_mins = (time_in_secs / 60.0) as usize;
         return self.temperatures_[time_in_mins];
+    }
+
+    pub fn max_temp(&self) -> f32 {
+        return self.max_temp_;
+    }
+
+    pub fn min_temp(&self) -> f32 {
+        return self.min_temp_;
     }
 }
 
@@ -114,6 +130,16 @@ pub fn build_spline() {
 pub fn temperature(time_in_secs: f32) -> f32 {
     let mut temp = temp().write().unwrap();
     return temp.temperature(time_in_secs);
+}
+
+pub fn max_temp() -> f32 {
+    let temp = temp().read().unwrap();
+    return temp.max_temp();
+}
+
+pub fn min_temp() -> f32 {
+    let temp = temp().read().unwrap();
+    return temp.min_temp();
 }
 
 pub fn print_track_temp_performance() {

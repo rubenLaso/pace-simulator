@@ -1,11 +1,13 @@
-import { Container } from "@mui/system";
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { Container } from "@mui/system";
 
 import { TyrePerfLineChart } from "../components/Tyres/TyrePerfLineChart";
 import { TrackTempLineChart } from "../components/Track/TrackTempLineChart";
 import { NumField } from "../components/utils/NumField";
+
+import { set_laptime_cold_track, set_laptime_warm_track } from 'glc-wasm';
 
 export const MyTabs = () => {
 	return (
@@ -21,17 +23,13 @@ export const MyTabs = () => {
 					<NumField id="laptime_cold_track" label="Cold track laptime"
 						onupdate={(value) => {
 							if (!isNaN(value)) {
-								const laptime =
-									new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(value);
-								console.log("Cold laptime: ", laptime);
+								set_laptime_cold_track(value);
 							}
 						}} />
 					<NumField id="laptime_warm_track" label="Warm track laptime"
 						onupdate={(value) => {
 							if (!isNaN(value)) {
-								const laptime =
-									new Intl.NumberFormat('en-UK', { style: 'unit', unit: 'second' }).format(value);
-								console.log("Warm laptime: ", laptime);
+								set_laptime_warm_track(value);
 							}
 						}} />
 					<TrackTempLineChart />
