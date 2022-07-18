@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react";
 import { Container } from "@mui/material";
-import { add_track_temp, set_track_temp, build_track_temp_spline, expected_laptime_by_track_temp, get_laptime_warm_track, get_laptime_cold_track, get_max_track_temp, get_min_track_temp } from 'glc-wasm';
+import { add_track_temp, set_track_temp, build_track_temp_spline, expected_laptime_by_track_temp, get_laptime_warm_track_full_tank, get_laptime_cold_track_full_tank, get_max_track_temp, get_min_track_temp } from 'glc-wasm';
 
 import { Line } from "react-chartjs-2";
 import dragdataPlugin from "chartjs-plugin-dragdata";
@@ -82,9 +82,9 @@ export const TrackTempLineChart = ({ xs = tyres_default_xs, ys = tyres_default_y
 						let laptime = 0.0;
 
 						if (track_temp >= get_max_track_temp()) {
-							laptime = get_laptime_warm_track();
+							laptime = get_laptime_warm_track_full_tank();
 						} else if (track_temp <= get_min_track_temp()) {
-							laptime = get_laptime_cold_track();
+							laptime = get_laptime_cold_track_full_tank();
 						} else {
 							laptime = expected_laptime_by_track_temp(track_temp);
 						}

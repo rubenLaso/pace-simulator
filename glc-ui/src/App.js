@@ -7,7 +7,7 @@ import { TyrePerfLineChart } from "../components/Tyres/TyrePerfLineChart";
 import { TrackTempLineChart } from "../components/Track/TrackTempLineChart";
 import { NumField } from "../components/utils/NumField";
 
-import { set_laptime_cold_track, set_laptime_warm_track } from 'glc-wasm';
+import { set_laptime_cold_track_full_tank, set_laptime_warm_track_full_tank } from 'glc-wasm';
 
 export const MyTabs = () => {
 	return (
@@ -23,13 +23,13 @@ export const MyTabs = () => {
 					<NumField id="laptime_cold_track" label="Cold track laptime"
 						onupdate={(value) => {
 							if (!isNaN(value)) {
-								set_laptime_cold_track(value);
+								set_laptime_cold_track_full_tank(value);
 							}
 						}} />
 					<NumField id="laptime_warm_track" label="Warm track laptime"
 						onupdate={(value) => {
 							if (!isNaN(value)) {
-								set_laptime_warm_track(value);
+								set_laptime_warm_track_full_tank(value);
 							}
 						}} />
 					<TrackTempLineChart />

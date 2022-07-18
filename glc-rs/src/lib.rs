@@ -1,5 +1,6 @@
 mod utils;
 
+mod laptimes;
 mod track;
 mod tyres;
 
@@ -12,23 +13,43 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
-pub fn set_laptime_cold_track(laptime: f32) {
-    track::perf::set_laptime_cold(laptime);
+pub fn set_laptime_cold_track_full_tank(laptime: f32) {
+    laptimes::laptimes::set_laptime_cold_track_full_tank(laptime);
 }
 
 #[wasm_bindgen]
-pub fn set_laptime_warm_track(laptime: f32) {
-    track::perf::set_laptime_warm(laptime);
+pub fn set_laptime_cold_track_empty_tank(laptime: f32) {
+    laptimes::laptimes::set_laptime_cold_track_empty_tank(laptime);
 }
 
 #[wasm_bindgen]
-pub fn get_laptime_cold_track() -> f32 {
-    return track::perf::get_laptime_cold();
+pub fn set_laptime_warm_track_full_tank(laptime: f32) {
+    laptimes::laptimes::set_laptime_warm_track_full_tank(laptime);
 }
 
 #[wasm_bindgen]
-pub fn get_laptime_warm_track() -> f32 {
-    return track::perf::get_laptime_warm();
+pub fn set_laptime_cold_track_old_tyres(laptime: f32) {
+    laptimes::laptimes::set_laptime_cold_track_old_tyres(laptime);
+}
+
+#[wasm_bindgen]
+pub fn get_laptime_cold_track_empty_tank() -> f32 {
+    return laptimes::laptimes::laptime_cold_track_empty_tank();
+}
+
+#[wasm_bindgen]
+pub fn get_laptime_cold_track_full_tank() -> f32 {
+    return laptimes::laptimes::laptime_cold_track_full_tank();
+}
+
+#[wasm_bindgen]
+pub fn get_laptime_warm_track_full_tank() -> f32 {
+    return laptimes::laptimes::laptime_warm_track_full_tank();
+}
+
+#[wasm_bindgen]
+pub fn get_laptime_cold_track_old_tyres() -> f32 {
+    return laptimes::laptimes::laptime_cold_track_old_tyres();
 }
 
 #[wasm_bindgen]
@@ -107,7 +128,7 @@ pub fn expected_laptime_by_track_temp(track_temp: f32) -> f32 {
         track::temp::min_temp(),
     );
 
-    let laptime = track::perf::get_laptime_cold() * track_temp_inv_perf;
+    let laptime = get_laptime_cold_track_full_tank() * track_temp_inv_perf;
 
     return laptime;
 }
