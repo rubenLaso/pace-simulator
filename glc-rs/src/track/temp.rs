@@ -5,15 +5,9 @@ use splines::{Interpolation, Key, Spline};
 
 use crate::utils::utils;
 
-struct TempChartData {
+pub struct TempChartData {
     xs_: Vec<f32>,
     ys_: Vec<f32>,
-}
-
-struct Temp {
-    temperatures_: [f32; 24 * 60],
-    max_temp_: f32,
-    min_temp_: f32,
 }
 
 impl TempChartData {
@@ -34,9 +28,21 @@ impl TempChartData {
     }
 }
 
-impl Temp {
+pub trait ITempModel {
+    fn temperature(&self, time_in_secs: f32) -> f32;
+    fn max_temp(&self) -> f32;
+    fn min_temp(&self) -> f32;
+}
+
+pub struct TempModel {
+    temperatures_: [f32; 24 * 60],
+    max_temp_: f32,
+    min_temp_: f32,
+}
+
+impl TempModel {
     pub fn new() -> Self {
-        Temp {
+        TempModel {
             temperatures_: [1.0; 24 * 60],
             max_temp_: 0.0,
             min_temp_: 0.0,
@@ -71,24 +77,26 @@ impl Temp {
 
         self.min_temp_ = self.temperatures_.iter().fold(f32::MAX, |a, &b| a.min(b));
     }
+}
 
-    pub fn temperature(&mut self, time_in_secs: f32) -> f32 {
-        let time_in_mins = (time_in_secs / 60.0) as usize;
-        return self.temperatures_[time_in_mins];
+impl ITempModel for TempModel {
+    fn temperature(&self, time_in_secs: f32) -> f32 {
+        let time_in_mins = time_in_secs / 60.0;
+        return self.temperatures_[time_in_mins as usize];
     }
 
-    pub fn max_temp(&self) -> f32 {
+    fn max_temp(&self) -> f32 {
         return self.max_temp_;
     }
 
-    pub fn min_temp(&self) -> f32 {
+    fn min_temp(&self) -> f32 {
         return self.min_temp_;
     }
 }
 
 lazy_static! {
     static ref TEMP_CHART_DATA: MutStatic<TempChartData> = MutStatic::new();
-    static ref TEMP: MutStatic<Temp> = MutStatic::new();
+    static ref TEMP: MutStatic<TempModel> = MutStatic::new();
 }
 
 fn temp_chart_data() -> &'static MutStatic<TempChartData> {
@@ -103,9 +111,9 @@ fn temp_chart_data() -> &'static MutStatic<TempChartData> {
     return &TEMP_CHART_DATA;
 }
 
-fn temp() -> &'static MutStatic<Temp> {
+fn temp() -> &'static MutStatic<TempModel> {
     if !TEMP.is_set().expect("Error with MutStatic variable") {
-        TEMP.set(Temp::new())
+        TEMP.set(TempModel::new())
             .expect("Could not create new MutStatic variable");
     }
     return &TEMP;
@@ -125,11 +133,6 @@ pub fn build_spline() {
     let chart_data = temp_chart_data().read().unwrap();
     let mut temp = temp().write().unwrap();
     temp.build_spline(chart_data.as_ref());
-}
-
-pub fn temperature(time_in_secs: f32) -> f32 {
-    let mut temp = temp().write().unwrap();
-    return temp.temperature(time_in_secs);
 }
 
 pub fn max_temp() -> f32 {

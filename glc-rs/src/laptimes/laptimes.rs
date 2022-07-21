@@ -1,14 +1,14 @@
 use lazy_static::lazy_static;
 use mut_static::MutStatic;
 
-trait ILaptimes {
+pub trait ILaptimes {
     fn cold_track_empty_tank(&self) -> f32;
     fn cold_track_full_tank(&self) -> f32;
     fn warm_track_full_tank(&self) -> f32;
     fn cold_track_old_tyres(&self) -> f32;
 }
 
-struct Laptimes {
+pub struct Laptimes {
     cold_track_empty_tank_: f32,
     cold_track_full_tank_: f32,
     warm_track_full_tank_: f32,
@@ -16,7 +16,7 @@ struct Laptimes {
 }
 
 impl Laptimes {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Laptimes {
             cold_track_empty_tank_: 0.0,
             cold_track_full_tank_: 0.0,
