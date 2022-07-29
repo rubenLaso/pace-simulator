@@ -1,13 +1,7 @@
 import React from "react";
-// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { Container } from "@mui/system";
-import { Button } from '@mui/material';
+import { Box, Button, Tabs, Tab, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 import { RacePane } from "../components/Race/RacePane";
 import { LaptimesPane } from "../components/Car/LaptimesPane";
@@ -61,7 +55,7 @@ export const MyTabs = () => {
 	return (
 		<Box sx={{ width: '100%' }}>
 			<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-				<Tabs value={value} onChange={handleChange} >
+				<Tabs value={value} onChange={handleChange} variant="scrollable" scrollButtons="auto" >
 					<Tab label="Race Info" {...a11yProps(0)} />
 					<Tab label="Reference laptimes" {...a11yProps(1)} />
 					<Tab label="Car Info" {...a11yProps(2)} />
