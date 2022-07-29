@@ -1,5 +1,6 @@
 mod utils;
 
+mod car;
 mod laptimes;
 mod track;
 mod tyres;
@@ -11,6 +12,36 @@ use wasm_bindgen::prelude::*;
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[wasm_bindgen]
+pub fn simulate() {
+    car::car_model::build_model();
+}
+
+#[wasm_bindgen]
+pub fn set_fuel_tank_capacity(tank: f32) {
+    car::car_model::set_fuel_tank_capacity(tank);
+}
+
+#[wasm_bindgen]
+pub fn set_fuel_per_lap(fuel: f32) {
+    car::car_model::set_fuel_per_lap(fuel);
+}
+
+#[wasm_bindgen]
+pub fn set_time_to_fill_fuel_tank(time: f32) {
+    car::car_model::set_time_to_fill_fuel_tank(time);
+}
+
+#[wasm_bindgen]
+pub fn set_time_to_change_tyres(time: f32) {
+    car::car_model::set_time_to_change_tyres(time);
+}
+
+#[wasm_bindgen]
+pub fn set_time_to_drive_through(time: f32) {
+    car::car_model::set_time_to_drive_through(time);
+}
 
 #[wasm_bindgen]
 pub fn set_laptime_cold_track_full_tank(laptime: f32) {

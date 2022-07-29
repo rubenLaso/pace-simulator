@@ -4,6 +4,8 @@ import { Container, Box } from "@mui/system";
 
 import { NumField } from "../../components/utils/NumField";
 
+import { set_fuel_per_lap, set_fuel_tank_capacity, set_time_to_change_tyres, set_time_to_drive_through, set_time_to_fill_fuel_tank } from 'glc-wasm';
+
 export const CarInfoPane = () => {
 	return (
 		<Container>
@@ -12,6 +14,7 @@ export const CarInfoPane = () => {
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Tank capacity (L): ", value);
+							set_fuel_tank_capacity(value);
 						}
 					}}
 				/>
@@ -19,6 +22,7 @@ export const CarInfoPane = () => {
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Fuel per lap (L): ", value);
+							set_fuel_per_lap(value);
 						}
 					}}
 				/>
@@ -26,6 +30,7 @@ export const CarInfoPane = () => {
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Tyres critical state (%): ", value);
+							// TODO: insert function
 						}
 					}}
 				/>
@@ -35,6 +40,7 @@ export const CarInfoPane = () => {
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Time to fill tank (s): ", value);
+							set_time_to_fill_fuel_tank(value);
 						}
 					}}
 				/>
@@ -42,6 +48,7 @@ export const CarInfoPane = () => {
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Time to change tyres (s): ", value);
+							set_time_to_change_tyres(value);
 						}
 					}}
 				/>
@@ -49,6 +56,7 @@ export const CarInfoPane = () => {
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Time to drive through pits (s): ", value);
+							set_time_to_drive_through(value);
 						}
 					}}
 				/>

@@ -9,6 +9,8 @@ import { CarInfoPane } from "../components/Car/CarInfoPane";
 import { TrackTempLineChart } from "../components/Track/TrackTempLineChart";
 import { TyrePerfLineChart } from "../components/Tyres/TyrePerfLineChart";
 
+import { simulate } from 'glc-wasm';
+
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
 
@@ -49,6 +51,7 @@ export const MyTabs = () => {
 
 	function handleSubmit(e) {
 		console.log("You clicked \"Run\"!!!");
+		simulate();
 		return true;
 	}
 
