@@ -4,13 +4,13 @@ import { Container, Box } from "@mui/system";
 
 import { NumField } from "../../components/utils/NumField";
 
-import { set_fuel_per_lap, set_fuel_tank_capacity, set_time_to_change_tyres, set_time_to_drive_through, set_time_to_fill_fuel_tank } from 'glc-wasm';
+import { set_fuel_per_lap, set_fuel_tank_capacity, set_time_to_change_tyres, set_time_to_drive_through, set_time_to_fill_fuel_tank, default_tank_capacity, default_fuel_per_lap, default_time_to_fill_tank, default_time_to_change_tyres, default_time_to_drive_through } from 'glc-wasm';
 
 export const CarInfoPane = () => {
 	return (
 		<Container>
 			<Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-				<NumField id="tank_capacity" label="Tank capacity (L)"
+				<NumField id="tank_capacity" label="Tank capacity (L)" default_value={default_tank_capacity()}
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Tank capacity (L): ", value);
@@ -18,7 +18,7 @@ export const CarInfoPane = () => {
 						}
 					}}
 				/>
-				<NumField id="fuel_per_lap" label="Fuel per lap (L)"
+				<NumField id="fuel_per_lap" label="Fuel per lap (L)" default_value={default_fuel_per_lap()}
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Fuel per lap (L): ", value);
@@ -26,7 +26,7 @@ export const CarInfoPane = () => {
 						}
 					}}
 				/>
-				<NumField id="tyres_critical_state" label="Tyres critical state (%)"
+				<NumField id="tyres_critical_state" label="Tyres critical state (%)" default_value={30.0}
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Tyres critical state (%): ", value);
@@ -36,7 +36,7 @@ export const CarInfoPane = () => {
 				/>
 			</Box>
 			<Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-				<NumField id="time_to_fill_tank" label="Time to fill tank (s)"
+				<NumField id="time_to_fill_tank" label="Time to fill tank (s)" default_value={default_time_to_fill_tank()}
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Time to fill tank (s): ", value);
@@ -44,7 +44,7 @@ export const CarInfoPane = () => {
 						}
 					}}
 				/>
-				<NumField id="time_to_change_tyres" label="Time to change tyres (s)"
+				<NumField id="time_to_change_tyres" label="Time to change tyres (s)" default_value={default_time_to_change_tyres()}
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Time to change tyres (s): ", value);
@@ -52,7 +52,7 @@ export const CarInfoPane = () => {
 						}
 					}}
 				/>
-				<NumField id="time_to_drive_through" label="Time to drive through pits (s)"
+				<NumField id="time_to_drive_through" label="Time to drive through pits (s)" default_value={default_time_to_drive_through()}
 					onupdate={(value) => {
 						if (!isNaN(value)) {
 							console.log("Time to drive through pits (s): ", value);

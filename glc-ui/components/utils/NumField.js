@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export const NumField = ({ field_id, label, onupdate }) => {
+export const NumField = ({ field_id, label, default_value, onupdate }) => {
 	return (
 		<Box
 			// component="form"
@@ -18,7 +18,7 @@ export const NumField = ({ field_id, label, onupdate }) => {
 				}
 			}}
 		>
-			<TextField id={field_id} label={label} type="number" variant="filled" />
+			<TextField id={field_id} label={label} type="number" variant="filled" defaultValue={default_value} />
 		</Box >
 	);
 }

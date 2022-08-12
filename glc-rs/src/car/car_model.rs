@@ -4,6 +4,12 @@ use mut_static::MutStatic;
 use crate::utils::utils::log;
 use crate::{console_log, laptimes};
 
+pub const DEFAULT_TANK_CAPACITY: f32 = 75.0;
+pub const DEFAULT_FUEL_PER_LAP: f32 = 2.75;
+pub const DEFAULT_TIME_TO_FILL_TANK: f32 = 30.0;
+pub const DEFAULT_TIME_TO_CHANGE_TYRES: f32 = 30.0;
+pub const DEFAULT_TIME_TO_DRIVE_THROUGH: f32 = 30.0;
+
 pub trait ICarModel {
     fn optimal_laptime(&self) -> f32;
     fn av_speed(&self) -> f32;
@@ -127,11 +133,11 @@ struct CarModelData {
 impl CarModelData {
     pub fn new() -> Self {
         CarModelData {
-            fuel_tank_capacity_: 0.0,
-            fuel_per_lap_: 0.0,
-            time_to_fill_fuel_tank_: 0.0,
-            time_to_change_tyres_: 0.0,
-            time_to_drive_through_: 0.0,
+            fuel_tank_capacity_: DEFAULT_TANK_CAPACITY,
+            fuel_per_lap_: DEFAULT_FUEL_PER_LAP,
+            time_to_fill_fuel_tank_: DEFAULT_TIME_TO_FILL_TANK,
+            time_to_change_tyres_: DEFAULT_TIME_TO_CHANGE_TYRES,
+            time_to_drive_through_: DEFAULT_TIME_TO_DRIVE_THROUGH,
         }
     }
 }
@@ -194,8 +200,8 @@ pub fn build_model() {
     let car_model = CAR_MODEL.read().unwrap();
 
     console_log!("Optimal laptime: {} s", car_model.optimal_laptime());
-    console_log!("Av. speed: {}", car_model.av_speed());
-    console_log!("Fuel tank capacity: {}", car_model.fuel_tank_capacity());
+    console_log!("Av. speed: {} %/s", car_model.av_speed());
+    console_log!("Fuel tank capacity: {} L", car_model.fuel_tank_capacity());
     console_log!("Fuel per lap: {} L", car_model.fuel_per_lap());
     console_log!(
         "Time to fill fuel tank: {} s",

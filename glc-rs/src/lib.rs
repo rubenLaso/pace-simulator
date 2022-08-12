@@ -19,6 +19,31 @@ pub fn simulate() {
 }
 
 #[wasm_bindgen]
+pub fn default_tank_capacity() -> f32 {
+    return car::car_model::DEFAULT_TANK_CAPACITY;
+}
+
+#[wasm_bindgen]
+pub fn default_fuel_per_lap() -> f32 {
+    return car::car_model::DEFAULT_FUEL_PER_LAP;
+}
+
+#[wasm_bindgen]
+pub fn default_time_to_fill_tank() -> f32 {
+    return car::car_model::DEFAULT_TIME_TO_FILL_TANK;
+}
+
+#[wasm_bindgen]
+pub fn default_time_to_change_tyres() -> f32 {
+    return car::car_model::DEFAULT_TIME_TO_CHANGE_TYRES;
+}
+
+#[wasm_bindgen]
+pub fn default_time_to_drive_through() -> f32 {
+    return car::car_model::DEFAULT_TIME_TO_DRIVE_THROUGH;
+}
+
+#[wasm_bindgen]
 pub fn set_fuel_tank_capacity(tank: f32) {
     car::car_model::set_fuel_tank_capacity(tank);
 }
@@ -41,6 +66,26 @@ pub fn set_time_to_change_tyres(time: f32) {
 #[wasm_bindgen]
 pub fn set_time_to_drive_through(time: f32) {
     car::car_model::set_time_to_drive_through(time);
+}
+
+#[wasm_bindgen]
+pub fn default_laptime_cold_track_empty_tank() -> f32 {
+    return laptimes::laptimes::LAPTIME_COLD_TRACK_EMPTY_TANK;
+}
+
+#[wasm_bindgen]
+pub fn default_laptime_cold_track_full_tank() -> f32 {
+    return laptimes::laptimes::LAPTIME_COLD_TRACK_FULL_TANK;
+}
+
+#[wasm_bindgen]
+pub fn default_laptime_warm_track_full_tank() -> f32 {
+    return laptimes::laptimes::LAPTIME_WARM_TRACK_FULL_TANK;
+}
+
+#[wasm_bindgen]
+pub fn default_laptime_cold_track_old_tyres() -> f32 {
+    return laptimes::laptimes::LAPTIME_COLD_TRACK_OLD_TYRES;
 }
 
 #[wasm_bindgen]

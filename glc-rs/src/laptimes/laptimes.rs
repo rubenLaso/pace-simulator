@@ -1,6 +1,11 @@
 use lazy_static::lazy_static;
 use mut_static::MutStatic;
 
+pub const LAPTIME_COLD_TRACK_EMPTY_TANK: f32 = 92.50;
+pub const LAPTIME_COLD_TRACK_FULL_TANK: f32 = 93.20;
+pub const LAPTIME_WARM_TRACK_FULL_TANK: f32 = 93.50;
+pub const LAPTIME_COLD_TRACK_OLD_TYRES: f32 = 92.75;
+
 pub trait ILaptimes {
     fn cold_track_empty_tank(&self) -> f32;
     fn cold_track_full_tank(&self) -> f32;
@@ -18,10 +23,10 @@ pub struct Laptimes {
 impl Laptimes {
     pub fn new() -> Self {
         Laptimes {
-            cold_track_empty_tank_: 0.0,
-            cold_track_full_tank_: 0.0,
-            warm_track_full_tank_: 0.0,
-            cold_track_old_tyres_: 0.0,
+            cold_track_empty_tank_: LAPTIME_COLD_TRACK_EMPTY_TANK,
+            cold_track_full_tank_: LAPTIME_COLD_TRACK_FULL_TANK,
+            warm_track_full_tank_: LAPTIME_WARM_TRACK_FULL_TANK,
+            cold_track_old_tyres_: LAPTIME_COLD_TRACK_OLD_TYRES,
         }
     }
 
